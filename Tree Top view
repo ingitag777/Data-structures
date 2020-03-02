@@ -1,0 +1,74 @@
+import java.util.*;
+import java.io.*;
+
+class Node {
+    Node left;
+    Node right;
+    int data;
+    
+    Node(int data) {
+        this.data = data;
+        left = null;
+        right = null;
+    }
+}
+
+class Solution {
+	public static void topView(Node root) {
+     TreeMap<Integer,Node> tm= new TreeMap<Integer,Node>();
+        Map<Node,Integer> hm= new LinkedHashMap<Node,Integer>();
+        
+        if(root!=null)
+            hm.put(root,0);
+        while(!hm.isEmpty())
+        {
+            Node nd=(Node)hm.keySet().toArray()[0];
+            int hd=hm.get(nd);
+            
+            hm.remove(nd);
+            
+            if(!tm.containsKey(hd)) 
+                tm.put(hd,nd);
+            
+            if (nd.left != null)
+                hm.put(nd.left,hd-1);
+            if (nd.right != null)
+                hm.put(nd.right,hd+1);
+        }
+        
+        for(Node n:tm.values())
+        {
+            System.out.print(n.data+" ");
+        }
+                              
+      
+    }
+
+	public static Node insert(Node root, int data) {
+        if(root == null) {
+            return new Node(data);
+        } else {
+            Node cur;
+            if(data <= root.data) {
+                cur = insert(root.left, data);
+                root.left = cur;
+            } else {
+                cur = insert(root.right, data);
+                root.right = cur;
+            }
+            return root;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int t = scan.nextInt();
+        Node root = null;
+        while(t-- > 0) {
+            int data = scan.nextInt();
+            root = insert(root, data);
+        }
+        scan.close();
+        topView(root);
+    }	
+}
